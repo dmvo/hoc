@@ -5,7 +5,8 @@
 
 %token NUMBER
 %left '+' '-'
-%left '*' '/'
+%left '*' '/' '%'
+%left UNARYMINUS
 
 %%
 list:
@@ -17,7 +18,10 @@ expr:	NUMBER { $$ = $1; }
 	| expr '-' expr { $$ = $1 - $3; }
 	| expr '*' expr { $$ = $1 * $3; }
 	| expr '/' expr { $$ = $1 / $3; }
+	| expr '%' expr { $$ = $1 - ($1 / $3) * $3;}
 	| '(' expr ')' { $$ = $2; }
+	| '-' expr %prec UNARYMINUS { $$ = -$2; }
+	| '+' expr %prec UNARYMINUS { $$ = $2; }
 	;
 %%
 
