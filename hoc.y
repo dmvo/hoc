@@ -3,6 +3,8 @@
 
 double mem[26];
 
+double previous;
+
 void execerror(const char *, const char *);
 %}
 
@@ -12,6 +14,7 @@ void execerror(const char *, const char *);
 }
 
 %token <val> NUMBER
+%token <val> PREVIOUS
 %token <index> VAR
 %type <val> expr
 %right '='
@@ -23,9 +26,11 @@ void execerror(const char *, const char *);
 
 list:
 	| list '\n'
-	| list expr '\n' { printf("\t%.8g\n", $2); }
+	| list expr '\n' { previous = $2;
+				printf("\t%.8g\n", $2); }
 	;
 expr:	NUMBER { $$ = $1; }
+	| PREVIOUS { $$ = previous; }
 	| VAR { $$ = mem[$1]; }
 	| VAR '=' expr { $$ = mem[$1] = $3; }
 	| expr '+' expr { $$ = $1 + $3; }
@@ -92,6 +97,9 @@ int yylex()
 		scanf("%lf", &yylval.val);
 		return NUMBER;
 	}
+
+	if (c == 'p')
+		return PREVIOUS;
 
 	if (islower(c)) {
 		yylval.index = c - 'a';
