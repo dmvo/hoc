@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+
 #define YYSTYPE double
 %}
 
@@ -9,6 +10,7 @@
 %left UNARYMINUS
 
 %%
+
 list:
 	| list '\n'
 	| list expr '\n' { printf("\t%.8g\n", $2); }
@@ -23,22 +25,30 @@ expr:	NUMBER { $$ = $1; }
 	| '-' expr %prec UNARYMINUS { $$ = -$2; }
 	| '+' expr %prec UNARYMINUS { $$ = $2; }
 	;
+
 %%
 
 #include <ctype.h>
 
 int lineno = 1;
+char *progname;
 
-int main()
+int main(int argc, char *argv[])
 {
+	progname = argv[0];
 	yyparse();
 	return 0;
 }
 
+void warning(const char *s, const char *t)
+{
+	fprintf(stderr, "%s: %s", progname, s);
+	fprintf(stderr, " near line %d\n", lineno);
+}
+
 int yyerror(const char *s)
 {
-	fprintf(stderr, "%s near line %d\n", s, lineno);
-
+	warning(s, NULL);
 	return 0;
 }
 
