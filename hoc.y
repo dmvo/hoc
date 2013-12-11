@@ -24,15 +24,16 @@ void execerror(const char *, const char *);
 
 %%
 
-list:	/* nothing */
+list    : /* nothing */
 	| list delim
-	| list expr delim { previous = $2;
-				printf("\t%.8g\n", $2); }
+        | list expr delim {
+		previous = $2;
+		printf("\t%.8g\n", $2); }
 	;
-
-delim: '\n' | ';';
-
-expr:	NUMBER { $$ = $1; }
+delim   : '\n'
+        | ';'
+	;
+expr    : NUMBER { $$ = $1; }
 	| PREVIOUS { $$ = previous; }
 	| VAR { $$ = mem[$1]; }
 	| VAR '=' expr { $$ = mem[$1] = $3; }
