@@ -24,11 +24,14 @@ void execerror(const char *, const char *);
 
 %%
 
-list:
-	| list '\n'
-	| list expr '\n' { previous = $2;
+list:	/* nothing */
+	| list delim
+	| list expr delim { previous = $2;
 				printf("\t%.8g\n", $2); }
 	;
+
+delim: '\n' | ';';
+
 expr:	NUMBER { $$ = $1; }
 	| PREVIOUS { $$ = previous; }
 	| VAR { $$ = mem[$1]; }
