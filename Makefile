@@ -3,7 +3,7 @@ all: hoc
 hoc.o: hoc.c hoc.h
 	cc -c hoc.c
 
-hoc: hoc.o symbol.o
+hoc: hoc.o symbol.o math.o
 
 clean:
 	-rm -f *.o hoc hoc.c

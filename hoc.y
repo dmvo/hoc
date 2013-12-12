@@ -1,11 +1,9 @@
 %{
 #include <stdio.h>
+#include "hoc.h"
 
 double mem[26];
-
 double previous;
-
-void execerror(const char *, const char *);
 %}
 
 %union {
@@ -17,6 +15,7 @@ void execerror(const char *, const char *);
 %token <val> PREVIOUS
 %token <index> VAR
 %type <val> expr
+%right '^'
 %right '='
 %left '+' '-'
 %left '*' '/' '%'
@@ -44,7 +43,8 @@ expr    : NUMBER { $$ = $1; }
 		if ($3 == 0.0)
 			execerror("division by zero", NULL);
 		$$ = $1 / $3; }
-	| expr '%' expr { $$ = $1 - ($1 / $3) * $3;}
+	| expr '%' expr { $$ = $1 - ($1 / $3) * $3; }
+	| expr '^' expr { $$ = Pow($1, $3); }
 	| '(' expr ')' { $$ = $2; }
 	| '-' expr %prec UNARYMINUS { $$ = -$2; }
 	| '+' expr %prec UNARYMINUS { $$ = $2; }
@@ -71,6 +71,8 @@ int main(int argc, char *argv[])
 void warning(const char *s, const char *t)
 {
 	fprintf(stderr, "%s: %s", progname, s);
+	if (t)
+		fprintf(stderr, " %s", t);
 	fprintf(stderr, " near line %d\n", lineno);
 }
 
