@@ -15,6 +15,8 @@ struct symbol {
 struct symbol *install(const char *, int, double);
 struct symbol *lookup(const char *);
 
+void init(void);
+
 void execerror(const char *, const char *);
 
 double Pow(double, double);

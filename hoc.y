@@ -66,6 +66,7 @@ jmp_buf begin;
 int main(int argc, char *argv[])
 {
 	progname = argv[0];
+	init();
 	setjmp(begin);
 	yyparse();
 	return 0;
