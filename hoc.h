@@ -12,7 +12,7 @@ struct symbol {
 	struct symbol *next;
 };
 
-struct symbol *install(const char *, short, double);
+struct symbol *install(const char *, int, double);
 struct symbol *lookup(const char *);
 
 void execerror(const char *, const char *);

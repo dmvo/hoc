@@ -22,7 +22,7 @@ struct symbol *lookup(const char *name)
 /*
  * Installs a new element to the symbol table.
  */
-struct symbol *install(const char *name, short type, double val)
+struct symbol *install(const char *name, int type, double val)
 {
 	struct symbol *s;
 
