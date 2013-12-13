@@ -1,3 +1,5 @@
+YFLAGS = -d
+
 all: hoc
 
 hoc.o: hoc.c hoc.h
@@ -6,4 +8,4 @@ hoc.o: hoc.c hoc.h
 hoc: hoc.o symbol.o math.o
 
 clean:
-	-rm -f *.o hoc hoc.c
+	-rm -f *.o hoc hoc.c y.tab.[ch]
