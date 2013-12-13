@@ -14,7 +14,7 @@ double previous;
 %token <val> NUMBER
 %token <val> PREVIOUS
 %token <index> VAR
-%type <val> expr
+%type <val> expr asgn
 %right '^'
 %right '='
 %left '+' '-'
@@ -25,6 +25,7 @@ double previous;
 
 list    : /* nothing */
 	| list delim
+	| list asgn delim
         | list expr delim {
 		previous = $2;
 		printf("\t%.8g\n", $2); }
@@ -32,10 +33,12 @@ list    : /* nothing */
 delim   : '\n'
         | ';'
 	;
+asgn:	VAR '=' expr { $$ = mem[$1] = $3; }
+	;
 expr    : NUMBER { $$ = $1; }
 	| PREVIOUS { $$ = previous; }
 	| VAR { $$ = mem[$1]; }
-	| VAR '=' expr { $$ = mem[$1] = $3; }
+	| asgn
 	| expr '+' expr { $$ = $1 + $3; }
 	| expr '-' expr { $$ = $1 - $3; }
 	| expr '*' expr { $$ = $1 * $3; }
